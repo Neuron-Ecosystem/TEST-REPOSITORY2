@@ -1,0 +1,249 @@
+:root {
+    --bg-color: #050508;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --font-main: 'Montserrat', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    overflow: hidden; /* Блокируем скролл */
+    width: 100vw;
+    height: 100vh;
+}
+
+/* --- 3D Container --- */
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* --- UI Layers --- */
+.ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* Пропускаем клики сквозь пустые места */
+    transition: opacity 0.8s ease-in-out;
+}
+
+.ui-layer.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Позволяем кликать на контент внутри UI слоев */
+.ui-layer > * {
+    pointer-events: auto;
+}
+
+/* --- Glassmorphism Cards --- */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+/* --- Typography --- */
+h1 {
+    font-weight: 200;
+    letter-spacing: 4px;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-weight: 200;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+/* --- Auth Form --- */
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: white;
+    font-family: var(--font-main);
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: white;
+    background: rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+.auth-toggle {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.auth-toggle span {
+    color: white;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* --- App Interface --- */
+.controls-container {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+@media (min-width: 768px) {
+    .mosaic-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.mood-btn {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+.mood-btn:hover {
+    border-color: var(--glow-color);
+    box-shadow: 0 0 15px var(--glow-color);
+    transform: translateY(-5px);
+}
+
+/* --- Stats Panel --- */
+.stats-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* JS will toggle flex */
+    flex-direction: column;
+    z-index: 20;
+}
+
+.stats-card.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 5px;
+}
+
+#close-stats {
+    margin-top: 15px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* --- Utility --- */
+.glass-btn-small {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.05);
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.glass-btn-small:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
