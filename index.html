@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTUM MOSAIC</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div id="auth-overlay" class="ui-layer">
+        <div class="glass-panel auth-card">
+            <h1>MOMENTUM MOSAIC</h1>
+            <p class="subtitle">Цифровой пульс человечества</p>
+            
+            <form id="auth-form">
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn-primary">Connect to Mosaic</button>
+            </form>
+            <p class="auth-toggle">Нет аккаунта? <span id="toggle-auth-mode">Регистрация</span></p>
+        </div>
+    </div>
+
+    <div id="app-interface" class="ui-layer hidden">
+        
+        <div class="controls-container">
+            <h2 class="fade-in">Что ты делаешь прямо сейчас?</h2>
+            
+            <div class="mosaic-grid">
+                <button class="mood-btn" data-mood="CREATE" style="--glow-color: #FFD700;">
+                    <span>CREATE</span>
+                </button>
+                <button class="mood-btn" data-mood="WORK" style="--glow-color: #4169E1;">
+                    <span>WORK</span>
+                </button>
+                <button class="mood-btn" data-mood="COMMUTE" style="--glow-color: #32CD32;">
+                    <span>COMMUTE</span>
+                </button>
+                <button class="mood-btn" data-mood="SLEEP" style="--glow-color: #4B0082;">
+                    <span>SLEEP</span>
+                </button>
+                <button class="mood-btn" data-mood="ANXIOUS" style="--glow-color: #808080;">
+                    <span>ANXIOUS</span>
+                </button>
+                <button class="mood-btn" data-mood="ACTIVE" style="--glow-color: #FF4500;">
+                    <span>ACTIVE</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="stats-panel" class="glass-panel stats-card hidden">
+            <h3>Статистика региона</h3>
+            <div id="stats-content"></div>
+            <button id="close-stats">Закрыть</button>
+        </div>
+
+        <button id="logout-btn" class="glass-btn-small">Disconnect</button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
