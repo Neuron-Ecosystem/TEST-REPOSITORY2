@@ -1,80 +1,234 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOMENTUM MOSAIC</title>
-    <link rel="stylesheet" href="styles.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
-
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
+    <title>Neuron Ecosystem | Liquid Glass</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --accent: #818cf8;
+            --text: #ffffff;
+            --bg: #030014;
         }
-    </script>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Чтобы сферы не создавали скролл */
+        }
+
+        /* Анимированный фон "Жидкое стекло" */
+        .liquid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0.6;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent), #c084fc);
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-1 { width: 400px; height: 400px; top: -100px; left: -100px; }
+        .blob-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; background: #38bdf8; animation-delay: -5s; }
+        .blob-3 { width: 250px; height: 250px; top: 40%; left: 50%; background: #f472b6; animation-delay: -10s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(100px, 150px) rotate(360deg); }
+        }
+
+        /* Главный контейнер */
+        .glass-shell {
+            width: 90%;
+            max-width: 1000px;
+            background: var(--glass);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Сетка полезных модулей */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            text-decoration: none;
+            color: white;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .glass-card i {
+            font-size: 1.8rem;
+            background: var(--accent);
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 15px;
+        }
+
+        .card-info h3 { font-size: 1.1rem; margin-bottom: 5px; }
+        .card-info p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
+
+        /* Центр управления (Польза) */
+        .control-bar {
+            grid-column: span 3;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .status-item { text-align: center; }
+        .status-item span { display: block; font-size: 0.7rem; color: var(--accent); text-transform: uppercase; }
+        .status-item strong { font-size: 1.2rem; font-family: monospace; }
+
+        @media (max-width: 768px) {
+            .module-grid { grid-template-columns: 1fr; }
+            .control-bar { flex-direction: column; gap: 15px; grid-column: span 1; }
+            .glass-shell { height: 90vh; overflow-y: auto; margin: 20px; padding: 20px; }
+        }
+    </style>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
-
-    <div id="auth-overlay" class="ui-layer">
-        <div class="glass-panel auth-card">
-            <h1>MOMENTUM MOSAIC</h1>
-            <p class="subtitle">Цифровой пульс человечества</p>
-            
-            <form id="auth-form">
-                <div class="input-group">
-                    <input type="email" id="email" placeholder="Email" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn-primary">Connect to Mosaic</button>
-            </form>
-            <p class="auth-toggle">Нет аккаунта? <span id="toggle-auth-mode">Регистрация</span></p>
-        </div>
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
     </div>
 
-    <div id="app-interface" class="ui-layer hidden">
-        
-        <div class="controls-container">
-            <h2 class="fade-in">Что ты делаешь прямо сейчас?</h2>
-            
-            <div class="mosaic-grid">
-                <button class="mood-btn" data-mood="CREATE" style="--glow-color: #FFD700;">
-                    <span>CREATE</span>
-                </button>
-                <button class="mood-btn" data-mood="WORK" style="--glow-color: #4169E1;">
-                    <span>WORK</span>
-                </button>
-                <button class="mood-btn" data-mood="COMMUTE" style="--glow-color: #32CD32;">
-                    <span>COMMUTE</span>
-                </button>
-                <button class="mood-btn" data-mood="SLEEP" style="--glow-color: #4B0082;">
-                    <span>SLEEP</span>
-                </button>
-                <button class="mood-btn" data-mood="ANXIOUS" style="--glow-color: #808080;">
-                    <span>ANXIOUS</span>
-                </button>
-                <button class="mood-btn" data-mood="ACTIVE" style="--glow-color: #FF4500;">
-                    <span>ACTIVE</span>
-                </button>
+    <div class="glass-shell">
+        <header>
+            <div class="logo-text">NEURON ECO</div>
+            <p style="color: rgba(255,255,255,0.5); margin-top: 10px;">Private Infrastructure • 2026</p>
+        </header>
+
+        <div class="module-grid">
+            <div class="control-bar">
+                <div class="status-item">
+                    <span>System Time</span>
+                    <strong id="clock">00:00</strong>
+                </div>
+                <div class="status-item">
+                    <span>Network</span>
+                    <strong style="color: #4ade80;">P2P Online</strong>
+                </div>
+                <div class="status-item">
+                    <span>Nodes</span>
+                    <strong>14 Active</strong>
+                </div>
             </div>
-        </div>
 
-        <div id="stats-panel" class="glass-panel stats-card hidden">
-            <h3>Статистика региона</h3>
-            <div id="stats-content"></div>
-            <button id="close-stats">Закрыть</button>
-        </div>
+            <a href="https://synapse.neuron-p2p.ru" class="glass-card">
+                <i class="fas fa-satellite-dish"></i>
+                <div class="card-info">
+                    <h3>Synapse</h3>
+                    <p>Мессенджер внутри браузера без серверов.</p>
+                </div>
+            </a>
 
-        <button id="logout-btn" class="glass-btn-small">Disconnect</button>
+            <a href="notes.html" class="glass-card">
+                <i class="fas fa-braille"></i>
+                <div class="card-info">
+                    <h3>Notes Core</h3>
+                    <p>P2P-синхронизация твоих данных.</p>
+                </div>
+            </a>
+
+            <a href="https://neuron-ai-eta.vercel.app/" class="glass-card">
+                <i class="fas fa-atom"></i>
+                <div class="card-info">
+                    <h3>Neuron AI</h3>
+                    <p>Локальный ИИ-ассистент.</p>
+                </div>
+            </a>
+
+            <a href="https://budget.neuron-p2p.ru" class="glass-card">
+                <i class="fas fa-chart-pie"></i>
+                <div class="card-info">
+                    <h3>Finances</h3>
+                    <p>Контроль бюджета в новой реальности.</p>
+                </div>
+            </a>
+
+            <a href="https://study.neuron-p2p.ru" class="glass-card">
+                <i class="fas fa-book-open"></i>
+                <div class="card-info">
+                    <h3>Study Hub</h3>
+                    <p>База знаний и расписание.</p>
+                </div>
+            </a>
+
+            <a href="https://neurondigital.tilda.ws" class="glass-card" style="border-color: var(--accent);">
+                <i class="fas fa-code"></i>
+                <div class="card-info">
+                    <h3>Digital Studio</h3>
+                    <p>Заказать разработку системы.</p>
+                </div>
+            </a>
+        </div>
     </div>
 
-    <script type="module" src="main.js"></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${h}:${m}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 </body>
 </html>
