@@ -6,139 +6,122 @@
     <title>Neuron Ecosystem | Liquid Glass</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --glass: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --accent: #818cf8;
-            --text: #ffffff;
-            --bg: #030014;
-        }
+  <style>
+    /* 1. ПЕРЕМЕННЫЕ ДИЗАЙНА — Меняешь здесь, меняется везде */
+    :root {
+        --bg-color: #0f0f23;           /* Глубокий темный фон */
+        --card-bg: #1a1b2e;            /* Фон карточек и панелей */
+        --accent-color: #9333ea;       /* Фиолетовый акцент */
+        --accent-hover: #a855f7;       /* Цвет при наведении */
+        --text-main: #ffffff;          /* Основной белый текст */
+        --text-secondary: #a0a0c0;     /* Вспомогательный текст */
+        --border-color: rgba(147, 51, 234, 0.2); /* Тонкие границы */
+        --input-bg: rgba(255, 255, 255, 0.05);   /* Фон полей ввода */
+        --glass-bg: rgba(26, 27, 46, 0.8);       /* Эффект стекла */
+        --success: #22c55e;            /* Зеленый для кнопок сохранения */
+        --danger: #ef4444;             /* Красный для удаления/выхода */
+        --radius: 16px;                /* Единое скругление */
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* 2. БАЗОВЫЕ СТИЛИ */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; /* Чтобы сферы не создавали скролл */
-        }
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
 
-        /* Анимированный фон "Жидкое стекло" */
-        .liquid-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            filter: blur(80px);
-            opacity: 0.6;
-        }
+    /* 3. КНОПКИ (Универсальные классы) */
+    .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: var(--radius);
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        font-size: 0.95rem;
+        color: white;
+    }
 
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent), #c084fc);
-            animation: move 20s infinite alternate;
-        }
+    .btn-primary { background: var(--accent-color); }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
-        .blob-1 { width: 400px; height: 400px; top: -100px; left: -100px; }
-        .blob-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; background: #38bdf8; animation-delay: -5s; }
-        .blob-3 { width: 250px; height: 250px; top: 40%; left: 50%; background: #f472b6; animation-delay: -10s; }
+    .btn-outline { 
+        background: transparent; 
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+    }
+    .btn-outline:hover { background: var(--input-bg); }
 
-        @keyframes move {
-            from { transform: translate(0, 0) rotate(0deg); }
-            to { transform: translate(100px, 150px) rotate(360deg); }
-        }
+    .btn-save { background: var(--success); }
+    .btn-save:hover { opacity: 0.9; transform: scale(1.02); }
 
-        /* Главный контейнер */
-        .glass-shell {
-            width: 90%;
-            max-width: 1000px;
-            background: var(--glass);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
+    .btn-danger { background: var(--danger); }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    /* 4. ПОЛЯ ВВОДА */
+    input, textarea {
+        background: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        color: var(--text-main);
+        padding: 12px 16px;
+        outline: none;
+        transition: var(--transition);
+    }
 
-        .logo-text {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #fff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    input:focus, textarea:focus {
+        border-color: var(--accent-color);
+        background: rgba(147, 51, 234, 0.05);
+    }
 
-        /* Сетка полезных модулей */
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
+    /* 5. КАРТОЧКИ И ПАНЕЛИ (Стеклянный эффект) */
+    .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+    }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px;
-            text-decoration: none;
-            color: white;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    /* 6. СКРОЛЛБАР (Чтобы не портил дизайн) */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { 
+        background: var(--border-color); 
+        border-radius: 10px; 
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
 
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--accent);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
+    /* 7. СПЕЦИФИЧНЫЕ ДЛЯ СТРАНИЦ КОНТЕЙНЕРЫ */
+    .app-container {
+        display: flex;
+        height: 100vh;
+        max-width: 1600px;
+        margin: 0 auto;
+        width: 100%;
+    }
 
-        .glass-card i {
-            font-size: 1.8rem;
-            background: var(--accent);
-            width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 15px;
-        }
-
-        .card-info h3 { font-size: 1.1rem; margin-bottom: 5px; }
-        .card-info p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
-
-        /* Центр управления (Польза) */
-        .control-bar {
-            grid-column: span 3;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .status-item { text-align: center; }
-        .status-item span { display: block; font-size: 0.7rem; color: var(--accent); text-transform: uppercase; }
-        .status-item strong { font-size: 1.2rem; font-family: monospace; }
-
-        @media (max-width: 768px) {
-            .module-grid { grid-template-columns: 1fr; }
-            .control-bar { flex-direction: column; gap: 15px; grid-column: span 1; }
-            .glass-shell { height: 90vh; overflow-y: auto; margin: 20px; padding: 20px; }
-        }
-    </style>
+    header {
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+</style>
 </head>
 <body>
 
